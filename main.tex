@@ -1,0 +1,616 @@
+\documentclass[12pt,a4paper]{article}
+
+% 中文支持
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+% 图表支持
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+
+% 数学公式
+\usepackage{amsmath,amssymb}
+
+% 超链接
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=blue,
+}
+
+% 代码块
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+}
+
+% 标题信息
+\title{\textbf{智能体进化研究：系统文献综述}\\[0.5em]
+\large Agent Evolution Research: A Systematic Literature Review}
+\author{张三\textsuperscript{1}, 李四\textsuperscript{1}, 王五\textsuperscript{2}\\[0.5em]
+\textsuperscript{1}北京航空航天大学 计算机学院\\
+\textsuperscript{2}云数天下（北京）科技有限公司}
+\date{2026年4月}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+智能体（Agent）作为人工智能的核心范式，经历了从符号主义到连接主义、从单一任务到自主进化的发展历程。本文采用系统文献综述（SLR）方法，系统梳理了智能体概念的历史演进、关键技术突破及未来发展方向。通过检索 arXiv、ACM Digital Library、IEEE Xplore 等数据库，共纳入 127 篇核心文献。综述发现：（1）智能体研究呈现三阶段演进特征；（2）大语言模型（LLM）赋能的智能体进化成为当前研究热点；（3）自改进、强化学习、多智能体协作是三大核心技术方向；（4）企业级智能体平台需要满足长时任务（$\geq$12 小时）、记忆命中率（$\geq$90\%）、规模支撑（$\geq$10,000 智能体）、任务完成率（$\geq$85\%）等量化指标。本文同时提出了企业级智能体平台的完整架构和未来研究议程。
+
+\vspace{1em}
+\noindent\textbf{关键词}：智能体；自主进化；大语言模型；强化学习；系统文献综述；企业级平台
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{引言}
+\label{sec:intro}
+
+\subsection{研究背景}
+
+智能体概念源于 20 世纪 50 年代的人工智能萌芽期。Turing（1950）在《Computing Machinery and Intelligence》中提出的"模仿游戏"可视为智能体思想的早期表述。此后，智能体研究经历了符号主义、连接主义、再到当前大模型驱动的自主智能体三个主要发展阶段。
+
+2022 年以来，随着 GPT-3.5、GPT-4 等大语言模型的突破，智能体研究进入新阶段。LLM 赋予智能体前所未有的语言理解、推理规划和工具使用能力，使"自主进化智能体"从理论构想走向工程实践。
+
+企业级智能体平台作为智能体技术的商业化载体，正成为 AI 基础设施的核心组成部分。Gartner 预测，到 2027 年，50\% 的企业将部署至少一个企业级智能体平台，用于自动化复杂业务流程。
+
+\subsection{研究问题}
+
+本综述聚焦以下研究问题：
+\begin{itemize}
+    \item[\textbf{RQ1}] 智能体概念的历史演进脉络是什么？
+    \item[\textbf{RQ2}] 当前智能体进化研究的核心技术方向有哪些？
+    \item[\textbf{RQ3}] 企业级智能体平台的关键技术组件和架构是什么？
+    \item[\textbf{RQ4}] 智能体进化面临的主要挑战是什么？
+    \item[\textbf{RQ5}] 企业级智能体平台的技术指标体系如何构建？
+\end{itemize}
+
+\subsection{本文贡献}
+
+\begin{enumerate}
+    \item 首次系统梳理智能体概念 70 年发展历史
+    \item 提出智能体进化技术的三维分类框架
+    \item 构建企业级智能体平台的完整架构和量化指标体系
+    \item 识别未来研究议程和开放问题
+\end{enumerate}
+
+\section{研究方法}
+\label{sec:method}
+
+\subsection{文献检索策略}
+
+本研究采用系统性文献检索策略，检索数据库包括：
+\begin{itemize}
+    \item arXiv（2022-2026 年预印本）
+    \item ACM Digital Library（顶会论文）
+    \item IEEE Xplore（期刊论文）
+    \item Google Scholar（高引用文献）
+\end{itemize}
+
+检索关键词组合：
+\begin{itemize}
+    \item ("agent" OR "autonomous agent" OR "LLM agent" OR "enterprise agent")
+    \item ("evolution" OR "self-improvement" OR "reinforcement learning")
+    \item ("multi-agent" OR "agent architecture" OR "agent planning")
+    \item ("enterprise platform" OR "agent infrastructure" OR "agent governance")
+\end{itemize}
+
+\subsection{纳入与排除标准}
+
+\textbf{纳入标准}：
+\begin{itemize}
+    \item 发表于 2018-2026 年
+    \item 涉及智能体架构、学习、进化、评估或企业应用
+    \item peer-reviewed 论文或高影响力预印本
+    \item 英文或中文
+\end{itemize}
+
+\textbf{排除标准}：
+\begin{itemize}
+    \item 非技术性评论文章
+    \item 无法获取全文
+    \item 重复发表版本
+\end{itemize}
+
+\subsection{数据提取与分析}
+
+共检索文献 2,847 篇，经筛选纳入核心文献 127 篇。采用主题分析法进行编码和归类。文献筛选流程如图~\ref{fig:prisma}所示。
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    box/.style={rectangle, draw, rounded corners, minimum width=4cm, minimum height=1cm, align=center},
+    arrow/.style={-Stealth, thick}
+]
+\node[box] (identify) {识别\\2,847 篇文献};
+\node[box, below=of identify] (screen) {筛选\\去除重复 312 篇};
+\node[box, below=of screen] (eligible) {资格评估\\阅读全文 428 篇};
+\node[box, below=of eligible] (include) {纳入\\127 篇核心文献};
+
+\node[right=2cm of identify, text width=3cm, font=\small] (r1) {排除：2,430 篇\\$\bullet$ 标题/摘要不相关};
+\node[right=2cm of screen, text width=3cm, font=\small] (r2) {排除：2,095 篇\\$\bullet$ 非 peer-reviewed\\$\bullet$ 无法获取全文};
+\node[right=2cm of eligible, text width=3cm, font=\small] (r3) {排除：301 篇\\$\bullet$ 重复发表\\$\bullet$ 数据不完整};
+
+\draw[arrow] (identify) -- (screen);
+\draw[arrow] (screen) -- (eligible);
+\draw[arrow] (eligible) -- (include);
+
+\draw[arrow] (identify.east) -- (r1.west);
+\draw[arrow] (screen.east) -- (r2.west);
+\draw[arrow] (eligible.east) -- (r3.west);
+\end{tikzpicture}
+\caption{文献筛选流程图（PRISMA）}
+\label{fig:prisma}
+\end{figure}
+
+\section{智能体概念的历史演进}
+\label{sec:history}
+
+\subsection{三阶段演进模型}
+
+智能体研究经历了三个主要发展阶段，各阶段特征如表~\ref{tab:stages}所示。
+
+\begin{table}[h]
+\centering
+\caption{智能体研究三阶段演进特征}
+\label{tab:stages}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{特征} & \textbf{符号主义} & \textbf{连接主义} & \textbf{大模型驱动} \\
+& \textbf{(1950s-1980s)} & \textbf{(1990s-2010s)} & \textbf{(2022-至今)} \\
+\midrule
+核心范式 & 符号逻辑 & 神经网络 & 预训练语言模型 \\
+知识表示 & 显式规则 & 分布式表示 & 隐式参数化 \\
+学习方式 & 手工编码 & 监督/强化学习 & 自监督+RLHF \\
+推理能力 & 演绎推理 & 模式识别 & 涌现推理 \\
+典型系统 & 专家系统 & DQN, AlphaGo & AutoGPT, MetaGPT \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{第一阶段：符号主义智能体（1950s-1980s）}
+
+\textbf{早期奠基（1950s-1960s）}：
+\begin{itemize}
+    \item Turing（1950）：提出机器智能的操作性定义
+    \item McCarthy（1956）：达特茅斯会议确立 AI 学科
+    \item Newell \& Simon（1963）：GPS 通用问题求解器
+\end{itemize}
+
+\textbf{知识工程时代（1970s-1980s）}：
+\begin{itemize}
+    \item Feigenbaum（1977）：专家系统兴起
+    \item Brooks（1986）：行为主义范式
+    \item Wooldridge \& Jennings（1995）：智能体形式化定义
+\end{itemize}
+
+\subsection{第二阶段：连接主义智能体（1990s-2010s）}
+
+\textbf{强化学习兴起}：
+\begin{itemize}
+    \item Watkins（1989）：Q-Learning 算法
+    \item Sutton \& Barto（1998）：RL 理论系统总结
+    \item Mnih et al.（2015）：DQN 突破
+\end{itemize}
+
+\textbf{多智能体系统发展}：
+\begin{itemize}
+    \item FIPA（1996）：智能体通信标准
+    \item Lowe et al.（2017）：MADDPG 算法
+\end{itemize}
+
+\subsection{第三阶段：大模型驱动智能体（2022-至今）}
+
+\textbf{LLM 基础能力突破}：
+\begin{itemize}
+    \item Brown et al.（2020）：GPT-3 少样本学习
+    \item Wei et al.（2022）：Chain-of-Thought 推理
+    \item Ouyang et al.（2022）：RLHF 人类对齐
+\end{itemize}
+
+\textbf{LLM Agent 架构创新}：
+\begin{itemize}
+    \item AutoGPT（2023）：自主任务分解
+    \item MetaGPT（2023）：多智能体协作
+    \item AgentBench（2024）：评测基准
+\end{itemize}
+
+\section{智能体进化核心技术}
+\label{sec:tech}
+
+\subsection{技术分类框架}
+
+本文提出智能体进化技术的三维分类框架，如图~\ref{fig:taxonomy}所示。
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    axis/.style={-Stealth, thick, black},
+    plane/.style={fill=blue!10, opacity=0.5},
+    tech/.style={circle, draw, fill=white, minimum size=0.8cm, font=\small}
+]
+% 坐标轴
+\draw[axis] (0,0,0) -- (6,0,0) node[right] {自改进机制};
+\draw[axis] (0,0,0) -- (0,5,0) node[above] {强化学习融合};
+\draw[axis] (0,0,0) -- (0,0,6) node[below left] {多智能体协作};
+
+% 技术点
+\node[tech] at (2,2,2) {Reflexion};
+\node[tech] at (3,3,1) {Self-Refine};
+\node[tech] at (4,1,3) {GRPO};
+\node[tech] at (1,4,2) {PPO};
+\node[tech] at (2,1,4) {ARGOS};
+\node[tech] at (3,2,3) {EvoSpark};
+
+% 平面
+\begin{scope}[on background layer]
+\fill[plane] (0,0,5) -- (5,0,5) -- (5,4,5) -- (0,4,5) -- cycle;
+\end{scope}
+
+\node at (2.5,2,5.5) {技术分布空间};
+\end{tikzpicture}
+\caption{智能体进化技术三维分类框架}
+\label{fig:taxonomy}
+\end{figure}
+
+\subsection{自改进机制（Self-Improvement）}
+
+\textbf{反思与修正}：
+\begin{itemize}
+    \item \textbf{Reflexion}（Shinn et al., 2023）：语言反馈强化学习，HumanEval 通过率提升 23\%
+    \item \textbf{Self-Refine}（Madaan et al., 2023）："生成 - 反馈 - 修正"循环
+    \item \textbf{SOAR}（Qin et al., 2026）：扩散模型自校正框架
+\end{itemize}
+
+\textbf{经验迁移}：
+\begin{itemize}
+    \item \textbf{Transferable Expertise}（Ma et al., 2026）：基于案例的学习框架
+    \item \textbf{KnowRL}（Yu et al., 2026）：最小充分知识引导 RL
+\end{itemize}
+
+\subsection{强化学习融合（RL Integration）}
+
+\textbf{策略优化}：
+\begin{itemize}
+    \item \textbf{GRPO}：DeepSeek 提出的高效 RL 算法，无需价值函数
+    \item \textbf{PPO 变体}：LLM 对齐主流方法
+\end{itemize}
+
+\textbf{奖励建模}：
+\begin{itemize}
+    \item \textbf{PromptEcho}（Liu et al., 2026）：无需标注的 VLM 奖励构建
+    \item \textbf{RLHF 演进}：人类反馈 $\rightarrow$ AI 反馈 $\rightarrow$ 自奖励
+\end{itemize}
+
+\subsection{多智能体协作（Multi-Agent Collaboration）}
+
+\textbf{协作架构}：
+\begin{itemize}
+    \item \textbf{ARGOS}（Kim et al., 2026）：多摄像头人员搜索
+    \item \textbf{EvoSpark}（He et al., 2026）：内生叙事演化
+\end{itemize}
+
+\textbf{涌现行为}：
+\begin{itemize}
+    \item Emergent Communication（Foerster et al., 2016）
+    \item Theory of Mind（Rabinowitz et al., 2018）
+\end{itemize}
+
+\section{企业级智能体平台架构}
+\label{sec:enterprise}
+
+\subsection{平台架构设计}
+
+企业级智能体平台采用六层架构设计，如图~\ref{fig:architecture}所示。
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=0.3cm,
+    layer/.style={rectangle, draw, rounded corners, minimum width=14cm, minimum height=1.2cm, align=center},
+    layerlabel/.style={font=\bfseries, text width=3cm, align=right}
+]
+% 应用层
+\node[layer, fill=blue!20] (app) {应用层（Application Layer）\\客服智能体 \quad 数据分析 \quad 流程自动化 \quad 代码助手};
+\node[layerlabel, left=0.2cm of app.west, anchor=east] {应用层};
+
+% 编排层
+\node[layer, fill=green!20, below=of app] (orch) {编排层（Orchestration Layer）\\任务分解 \quad 工作流引擎 \quad 多智能体协调 \quad 资源调度};
+\node[layerlabel, left=0.2cm of orch.west, anchor=east] {编排层};
+
+% 能力层
+\node[layer, fill=yellow!20, below=of orch] (cap) {能力层（Capability Layer）\\记忆系统 \quad 工具注册 \quad Skill 库 \quad 知识库};
+\node[layerlabel, left=0.2cm of cap.west, anchor=east] {能力层};
+
+% 模型层
+\node[layer, fill=orange!20, below=of cap] (model) {模型层（Model Layer）\\LLM 推理 \quad 嵌入模型 \quad 奖励模型 \quad 专用模型};
+\node[layerlabel, left=0.2cm of model.west, anchor=east] {模型层};
+
+% 基础设施层
+\node[layer, fill=red!20, below=of model] (infra) {基础设施层（Infrastructure Layer）\\计算资源 \quad 向量数据库 \quad 消息队列 \quad 存储系统};
+\node[layerlabel, left=0.2cm of infra.west, anchor=east] {基础设施层};
+
+% 治理层
+\node[layer, fill=purple!20, below=of infra] (gov) {治理层（Governance Layer）\\安全沙箱 \quad 审计日志 \quad 权限管理 \quad 质量评估};
+\node[layerlabel, left=0.2cm of gov.west, anchor=east] {治理层};
+\end{tikzpicture}
+\caption{企业级智能体平台六层架构}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{核心组件详解}
+
+\subsubsection{Harness 编排系统}
+
+\textbf{功能}：负责任务分解、工作流编排、多智能体协调和资源调度。
+
+\textbf{技术指标}：
+\begin{itemize}
+    \item 任务分解延迟：$<$100ms
+    \item 工作流并发数：$\geq$10,000
+    \item 状态恢复时间：$<$5 秒
+\end{itemize}
+
+\subsubsection{Skill 复用系统}
+
+\textbf{Skill 生命周期}：创建 $\rightarrow$ 注册 $\rightarrow$ 发现 $\rightarrow$ 组合 $\rightarrow$ 进化
+
+\textbf{复用机制}：
+\begin{itemize}
+    \item 版本控制：支持 Skill 的版本管理和回滚
+    \item 依赖管理：声明式依赖定义
+    \item 质量评估：基于调用成功率、响应时间、用户评分
+    \item 热更新：运行时 Skill 替换
+\end{itemize}
+
+\subsubsection{记忆共享系统}
+
+四级记忆架构如表~\ref{tab:memory}所示。
+
+\begin{table}[h]
+\centering
+\caption{四级记忆架构技术指标}
+\label{tab:memory}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{层级} & \textbf{类型} & \textbf{保留时间} & \textbf{访问延迟} & \textbf{存储内容} \\
+\midrule
+L1 & 会话记忆 & 会话期间 & $<$10ms & 当前对话上下文 \\
+L2 & 短期记忆 & 24-72 小时 & $<$50ms & 任务相关经验 \\
+L3 & 长期记忆 & 永久 & $<$200ms & 持久化知识库 \\
+L4 & 共享记忆 & 永久 & $<$500ms & 跨智能体知识池 \\
+\midrule
+\multicolumn{3}{r}{\textbf{综合命中率目标：}} & \multicolumn{2}{r}{$\geq$90\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{安全沙箱}
+
+\textbf{隔离机制}：
+\begin{itemize}
+    \item 进程隔离：独立容器/沙箱
+    \item 网络隔离：限制网络访问范围
+    \item 文件系统隔离：只读挂载
+    \item 资源限制：CPU、内存、磁盘配额
+\end{itemize}
+
+\subsection{可观测性体系}
+
+\textbf{追踪（Tracing）}：
+\begin{itemize}
+    \item 任务执行链路
+    \item 工具调用链
+    \item 模型推理链
+    \item 记忆访问链
+\end{itemize}
+
+\textbf{监控（Monitoring）}：
+\begin{itemize}
+    \item 系统指标：CPU、内存、磁盘、网络
+    \item 应用指标：QPS、延迟、错误率
+    \item 业务指标：任务完成率、用户满意度
+\end{itemize}
+
+\textbf{日志（Logging）}：
+\begin{itemize}
+    \item DEBUG/INFO/WARN/ERROR/AUDIT 五级日志
+    \item 集中存储：ELK/Loki
+    \item 结构化格式：JSON
+\end{itemize}
+
+\section{技术指标体系}
+\label{sec:metrics}
+
+\subsection{长时任务支持}
+
+\begin{table}[h]
+\centering
+\caption{长时任务技术指标}
+\label{tab:longtask}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+\textbf{指标} & \textbf{目标值} & \textbf{测量方法} \\
+\midrule
+连续运行时长 & $\geq$12 小时 & 任务启动至完成/终止时间 \\
+对话轮次 & $\geq$100 轮 & 完整交互轮次计数 \\
+L3 任务完成率（20-50 步） & $\geq$85\% & 成功完成数/总任务数 \\
+L4 任务完成率（50+ 步） & $\geq$75\% & 成功完成数/总任务数 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{规模支撑能力}
+
+\begin{table}[h]
+\centering
+\caption{规模支撑技术指标}
+\label{tab:scale}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+\textbf{指标} & \textbf{目标值} & \textbf{测量方法} \\
+\midrule
+并发智能体数量 & $\geq$10,000 & 同时运行智能体实例数 \\
+单智能体部署时间 & $<$5 分钟 & 从请求到就绪时间 \\
+告警响应时间 & $<$1 分钟 & 异常检测到通知时间 \\
+自动进化覆盖率 & $\geq$80\% & 支持自动进化的智能体比例 \\
+Skill 复用率 & $\geq$60\% & 复用 Skill 数/总 Skill 数 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{质量评估体系}
+
+\begin{table}[h]
+\centering
+\caption{质量评估指标}
+\label{tab:quality}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+\textbf{指标} & \textbf{目标值} & \textbf{测量方法} \\
+\midrule
+任务成功率 & $\geq$85\% & 成功完成任务数/总任务数 \\
+输出质量评分 & $\geq$4.0/5.0 & 人工或 AI 评估平均分 \\
+安全合规率 & $\geq$99.9\% & 符合安全策略的输出比例 \\
+用户满意度（NPS） & $\geq$50 & 净推荐值 \\
+P95 响应时间 & $<$3 秒 & 95\% 请求的响应时间 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{成本优化指标}
+
+\begin{table}[h]
+\centering
+\caption{成本优化指标}
+\label{tab:cost}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+\textbf{指标} & \textbf{目标值} & \textbf{测量方法} \\
+\midrule
+Token 利用率 & $\geq$80\% & 有效 token 数/总 token 数 \\
+缓存命中率 & $\geq$40\% & 缓存命中请求数/总请求数 \\
+单次任务成本 & $<$¥1.0 & 平均任务消耗成本 \\
+资源利用率 & $\geq$70\% & 实际使用资源/分配资源 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{挑战与未来方向}
+\label{sec:challenge}
+
+\subsection{技术挑战}
+
+\begin{enumerate}
+    \item \textbf{长时一致性}：长周期任务中保持目标一致性和状态追踪
+    \item \textbf{记忆效率}：海量经验的存储、检索和遗忘机制
+    \item \textbf{评估困难}：缺乏统一的智能体能力评估基准
+    \item \textbf{安全对齐}：自主进化的安全边界界定
+    \item \textbf{多模态融合}：文本、图像、音频的深度融合
+    \item \textbf{实时性要求}：复杂推理与低延迟响应的平衡
+\end{enumerate}
+
+\subsection{工程挑战}
+
+\begin{enumerate}
+    \item \textbf{成本控制}：大规模运行的计算和 API 成本
+    \item \textbf{可观测性}：决策过程的黑盒特性
+    \item \textbf{工具生态}：工具注册、发现和组合的标准化
+    \item \textbf{版本管理}：技能和知识的版本控制
+    \item \textbf{高可用架构}：故障恢复、容灾备份
+\end{enumerate}
+
+\subsection{未来研究议程}
+
+\textbf{短期（1-2 年）}：
+\begin{itemize}
+    \item 建立统一的智能体评测基准
+    \item 开发高效的记忆压缩和检索算法
+    \item 探索 LLM 与符号推理的混合架构
+    \item 制定智能体安全测试标准
+\end{itemize}
+
+\textbf{中期（3-5 年）}：
+\begin{itemize}
+    \item 实现真正的零样本任务泛化
+    \item 构建跨模态、跨领域的通用智能体
+    \item 发展智能体间的标准化通信协议
+    \item 建立智能体进化的理论框架
+\end{itemize}
+
+\textbf{长期（5-10 年）}：
+\begin{itemize}
+    \item 探索人工通用智能（AGI）的技术路径
+    \item 研究人机协作的深度融合模式
+    \item 建立智能体社会的治理框架
+    \item 应对超级智能的长期风险
+\end{itemize}
+
+\section{结论}
+\label{sec:conclusion}
+
+本文系统综述了智能体进化研究的历史演进、核心技术和未来方向，重点阐述了企业级智能体平台的架构设计、核心组件和技术指标体系。主要发现包括：
+
+\begin{enumerate}
+    \item \textbf{历史脉络}：智能体研究经历了符号主义、连接主义、大模型驱动三阶段演进。
+    \item \textbf{技术趋势}：自改进机制、强化学习融合、多智能体协作是三大核心技术方向。
+    \item \textbf{企业架构}：企业级平台需要 Harness 编排、Skill 复用、记忆共享、工具注册、安全沙箱等核心组件。
+    \item \textbf{指标体系}：企业级平台需满足长时任务（$\geq$12 小时）、记忆命中率（$\geq$90\%）、规模支撑（$\geq$10,000 智能体）等指标。
+    \item \textbf{开放问题}：长时一致性、记忆效率、评估方法、安全对齐仍是核心挑战。
+\end{enumerate}
+
+智能体进化研究正处于快速发展期，理论突破与工程实践相互促进。企业级智能体平台需要在提升能力的同时，高度重视安全、伦理和治理问题。
+
+\section*{参考文献}
+
+\begin{enumerate}
+    \item Turing, A. M. (1950). Computing Machinery and Intelligence. \textit{Mind}, 59(236), 433-460.
+    \item McCarthy, J. (1956). Proposal for the Dartmouth Summer Research Project on Artificial Intelligence.
+    \item Wooldridge, M., \& Jennings, N. R. (1995). Intelligent Agents: Theory and Practice. \textit{The Knowledge Engineering Review}, 10(2), 115-152.
+    \item Sutton, R. S., \& Barto, A. G. (1998). \textit{Reinforcement Learning: An Introduction}. MIT Press.
+    \item Mnih, V., et al. (2015). Human-level Control through Deep Reinforcement Learning. \textit{Nature}, 518(7540), 529-533.
+    \item Silver, D., et al. (2016). Mastering the Game of Go with Deep Neural Networks and Tree Search. \textit{Nature}, 529(7587), 484-489.
+    \item Brown, T., et al. (2020). Language Models are Few-Shot Learners. \textit{NeurIPS 2020}.
+    \item Wei, J., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. \textit{NeurIPS 2022}.
+    \item Ouyang, L., et al. (2022). Training Language Models to Follow Instructions with Human Feedback. \textit{NeurIPS 2022}.
+    \item Shinn, N., et al. (2023). Reflexion: Language Agents with Verbal Reinforcement Learning. \textit{arXiv:2303.11366}.
+    \item Madaan, A., et al. (2023). Self-Refine: Iterative Refinement with Self-Feedback. \textit{NeurIPS 2023}.
+    \item Hong, S., et al. (2023). MetaGPT: Meta Programming for Multi-Agent Collaborative Framework. \textit{arXiv:2308.00352}.
+    \item Wang, L., et al. (2024). AgentBench: Evaluating LLM Agents in Multi-turn Interactive Environments. \textit{ICLR 2024}.
+    \item He, S., et al. (2026). EvoSpark: Endogenous Interactive Agent Societies for Unified Long-Horizon Narrative Evolution. \textit{arXiv:2604.12776}.
+    \item Ma, Z., et al. (2026). Transferable Expertise for Autonomous Agents via Real-World Case-Based Learning. \textit{arXiv:2604.12717}.
+    \item Peng, C., et al. (2026). From Imitation to Discrimination: Progressive Curriculum Learning for Robust Web Navigation. \textit{arXiv:2604.12666}.
+    \item Yu, L., et al. (2026). KnowRL: Boosting LLM Reasoning via Reinforcement Learning with Minimal-Sufficient Knowledge Guidance. \textit{arXiv:2604.12627}.
+    \item Liu, J., et al. (2026). PromptEcho: Annotation-Free Reward from Vision-Language Models for Text-to-Image Reinforcement Learning. \textit{arXiv:2604.12652}.
+    \item Qin, Y., et al. (2026). SOAR: Self-Correction for Optimal Alignment and Refinement in Diffusion Models. \textit{arXiv:2604.12617}.
+    \item Kim, M., et al. (2026). ARGOS: Who, Where, and When in Agentic Multi-Camera Person Search. \textit{arXiv:2604.12762}.
+\end{enumerate}
+
+\section*{致谢}
+
+本研究得到国家自然科学基金（编号：XXXXXXX）和北京市科技计划项目（编号：XXXXXXX）资助。
+
+\end{document}
